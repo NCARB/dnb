@@ -22,9 +22,9 @@ namespace OwinApp.Middleware
             _basePath = basePath;
         }
 
-        public override Task Invoke(OwinRequest request, OwinResponse response)
+        public override Task Invoke(IOwinContext context)
         {
-            var requestPath = request.Path;
+            var requestPath = context.Request.Path.ToString();
 
             if (requestPath == "/")
             {
@@ -35,18 +35,18 @@ namespace OwinApp.Middleware
 
             if (File.Exists(filePath))
             {
-                SetContentType(filePath, response);
+                SetContentType(filePath, context.Response);
 
-                Console.WriteLine("Serving {0} as {1}", filePath, response.ContentType);
+                Console.WriteLine("Serving {0} as {1}", filePath, context.Response.ContentType);
                 
                 var bytes = File.ReadAllBytes(filePath);
-                response.Body.Write(bytes, 0, bytes.Length);
+                context.Response.Body.Write(bytes, 0, bytes.Length);
             }
 
-            return Next.Invoke(request, response);
+            return Next.Invoke(context);
         }
 
-        private void SetContentType(string filePath, OwinResponse response)
+        private void SetContentType(string filePath, IOwinResponse response)
         {
             var extension = Path.GetExtension(filePath).ToLowerInvariant();
 

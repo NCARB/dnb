@@ -11,11 +11,11 @@ namespace OwinApp.Middleware
     {
         public Logger(OwinMiddleware next) : base(next) {}
 
-        public override Task Invoke(OwinRequest request, OwinResponse response)
+        public override Task Invoke(IOwinContext context)
         {
-            Console.WriteLine(request.Method + " " + request.Uri.ToString());
+            Console.WriteLine(context.Request.Method + " " + context.Request.Uri.ToString());
 
-            return Next.Invoke(request, response);
+            return Next.Invoke(context);
         }
     }
 }

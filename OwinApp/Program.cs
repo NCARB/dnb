@@ -6,7 +6,7 @@ namespace OwinApp
 {
 	public class Program
 	{
-		private static ManualResetEvent _quitEvent = new ManualResetEvent(false);
+		private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
 
 		static void Main(string[] args)
 		{
@@ -18,14 +18,14 @@ namespace OwinApp
 
 			Console.CancelKeyPress += (sender, eArgs) =>
 			{
-				_quitEvent.Set();
+				QuitEvent.Set();
 				eArgs.Cancel = true;
 			};
 
 			using (WebApp.Start<Startup>(string.Format("http://*:{0}", port)))
 			{
 				Console.WriteLine("Started");
-				_quitEvent.WaitOne();
+				QuitEvent.WaitOne();
 			}
 		}
 	}
