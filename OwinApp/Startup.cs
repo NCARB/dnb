@@ -1,4 +1,7 @@
-﻿using System.Web.Http;
+﻿using System.Threading.Tasks;
+using System.Web.Cors;
+using System.Web.Http;
+using Microsoft.Owin.Cors;
 using Owin;
 using OwinApp.Middleware;
 
@@ -10,11 +13,8 @@ namespace OwinApp
 		{
             app.Use(typeof(Logger));
             app.Use(typeof(StaticFiles), "Content");
-
-            // Configure Web API for self-host. 
+            app.UseCors(CorsOptions.AllowAll);
             var config = new HttpConfiguration();
-            config.EnableCors();
-
             config.Routes.MapHttpRoute(
                 name: "dnbApi",
                 routeTemplate: "api/dnb/{resource}",
