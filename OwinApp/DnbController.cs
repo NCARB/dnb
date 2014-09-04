@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.Remoting.Channels;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using Newtonsoft.Json.Linq;
@@ -50,6 +51,23 @@ namespace OwinApp
                 response = client.Execute(request);
             }
             return Request.CreateResponse(response.StatusCode, JObject.Parse(response.Content));
+        }
+
+        public FindCompanyResponse GetUsingWsdlService()
+        {
+            var service = new EntityListService();
+            var request = new FindCompanyRequest
+            {
+                ServiceVersionNumber = "I have no idea what I'm doing",
+                FindCompanyRequestDetail = new FindCompanyRequestDetail
+                {
+                    FindSpecification = new SearchCompanySpecification
+                    {
+                        
+                     },
+                },
+            };
+            return service.FindCompany(request);
         }
     }
 }
